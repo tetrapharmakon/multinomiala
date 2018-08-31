@@ -1,0 +1,6 @@
+[
+  "multinomiala.py::test_show", 
+  "multinomiala.py::test_multiply", 
+  "multinomiala.py::test_len", 
+  "multinomiala.py::test_eq"
+]

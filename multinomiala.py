@@ -35,7 +35,10 @@ class Monomial:
     return len(self.vees)
 
   def __lt__(self,other):
-    return self.exps < other.exps
+    if sum(self.exps) != sum(other.exps):
+      return sum(self.exps) < sum(other.exps)
+    else:
+      return self.exps < other.exps
 
   def __mul__(self,other):
     l1, l2 = zip(*self.__reduce(zip(self.vees + other.vees, self.exps + other.exps)))
@@ -51,6 +54,18 @@ class Monomial:
     else:
       return all([self.coef == other.coef, sorted(zip(self.vees,self.exps)) == sorted(zip(other.vees,other.exps))])
 
+
+class Polynomial:
+# a Polynomial is a list of monomials
+  def __init__(self, P):
+    self.P = P
+
+  def show(self):
+    return ' + '.join(map(lambda x:x.show(), self.P))
+
+  def __mul__(self,other):
+    return [i * j for i in self.P for j in other.P]
+
 a = Monomial(3,[''], [0])
 b = Monomial(1, ['x'], [1])
 c = Monomial(1, ['y'], [1])
@@ -61,6 +76,8 @@ g = Monomial(3, ['y'], [1])
 
 u = Monomial(3,['x','y'],[2,3])
 v = Monomial(6, ['x','z'], [3,3])
+
+print (Polynomial([a]) * Polynomial([b]))[0].exps
 
 
 #===============[ tests ]===================
@@ -82,6 +99,10 @@ def test_show():
   assert Monomial(2, ["y"], [0]).show() == '2'
   assert Monomial(3, ['x','y','y','z'], [2,3,2,3]).show() == '3x^2y^5z^3'
   assert Monomial(3, ['a','b','b','a', 'c','c','c','d','e'], [2,3,2,3,4,3,6,1,2]).show() == '3a^5b^5c^13de^2'
+  assert Polynomial([a,b,c]).show() == '3 + x + y'
+  assert Polynomial([g,f,u]).show() == '3y + 2x + 3x^2y^3'
+  assert Polynomial([u**2,d,u]).show() == '9x^4y^6 + x^3 + 3x^2y^3'
+  assert (Polynomial([a]) * Polynomial([b])).show() == '3x'
   ############
 
 
@@ -109,7 +130,3 @@ def test_eq():
   assert (u * v).vees == ['x','y','z']
   assert (u * v).exps == [5,3,3]
   assert (u * v)**2 == Monomial(324,['x','y','z'], [10,6,6])
-
-
-def test_lt():
-  assert Monomial(1, ['x','y'], [1,1]) < Monomial(3, ['x','y'], [1,1]) 

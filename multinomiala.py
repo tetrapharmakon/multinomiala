@@ -65,16 +65,3 @@ class Polynomial:
 
   def __mul__(self,other):
     return [i * j for i in self.P for j in other.P]
-
-a = Monomial(3,[''], [0])
-b = Monomial(1, ['x'], [1])
-c = Monomial(1, ['y'], [1])
-d = Monomial(1, ['x'], [3])
-e = Monomial(1, ['y'], [4])
-f = Monomial(2, ['x'], [1])
-g = Monomial(3, ['y'], [1])
-
-u = Monomial(3,['x','y'],[2,3])
-v = Monomial(6, ['x','z'], [3,3])
-
-print (Polynomial([a]) * Polynomial([b]))[0].exps

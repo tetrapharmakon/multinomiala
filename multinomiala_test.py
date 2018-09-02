@@ -1,7 +1,5 @@
 from multinomiala import *
 
-#===============[ tests ]===================
-
 def test_show():
   assert Monomial(0, [], []).show() == '0'
   assert Monomial(0, ["x"], [1]).show() == '0'
@@ -25,6 +23,16 @@ def test_show():
   assert (Polynomial([a]) * Polynomial([b])).show() == '3x'
   ############
 
+a = Monomial(3,[''], [0])
+b = Monomial(1, ['x'], [1])
+c = Monomial(1, ['y'], [1])
+d = Monomial(1, ['x'], [3])
+e = Monomial(1, ['y'], [4])
+f = Monomial(2, ['x'], [1])
+g = Monomial(3, ['y'], [1])
+
+u = Monomial(3,['x','y'],[2,3])
+v = Monomial(6, ['x','z'], [3,3])
 
 def test_multiply():
   assert (a * a).show() == '9'

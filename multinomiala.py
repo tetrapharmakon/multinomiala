@@ -1,10 +1,51 @@
 import itertools
 
 class Monomial:
-  def __init__(self,coef,vees,exps):
+  def __init__(self,coef,vees_exps):
     self.coef = coef
-    self.vees = vees
-    self.exps = exps
+    if self.coef == 0:
+      self.vees = []
+      self.exps = []
+    else:
+      vees_exps = dict(filter(lambda (_,y): y != 0, vees_exps.items()))
+      self.vees = vees_exps.keys()
+      self.exps = vees_exps.values()
+
+  def _reduce(self,ls): 
+    return [(key, sum(i[1] for i in group)) for key, group in itertools.groupby(sorted(ls, key = lambda i: i[0]), lambda i: i[0])]
+  
+  def __len__(self):
+    return len(self.vees)
+
+  # def __lt__(self,other):
+  #   if sum(self.exps) != sum(other.exps):
+  #     return sum(self.exps) < sum(other.exps)
+  #   else:
+  #     return self.exps < other.exps
+
+  def __mul__(self,other):
+    reduced = self._reduce(zip(self.vees + other.vees, self.exps + other.exps))
+    if reduced == []:
+      l1, l2 = [], []
+    else:
+      l1, l2 = zip(*reduced)
+    return Monomial(self.coef * other.coef, dict(zip(list(l1), list(l2))))
+  
+  def __pow__(self, n):
+    f = lambda s,n:map(lambda x:x*n,s)
+    return Monomial(self.coef ** n, dict(zip(self.vees, f(self.exps,n))))
+
+  def __eq__(self,other):
+    if self.coef == other.coef and self.coef == 0:
+      return True
+    else:
+      return all([self.coef == other.coef, sorted(zip(self.vees,self.exps)) == sorted(zip(other.vees,other.exps))])
+
+  def __add__(self,other):
+    if self.vees == other.vees and self.exps == other.exps:
+      return Monomial(self.coef + other.coef, self.vees,self.exps)
+    else:
+      return Polynomial([self,other])
 
   def show(self):
     el = self._elevate()
@@ -28,37 +69,30 @@ class Monomial:
     straighten = sorted(zip(self.vees,self.exps))
     return ''.join(map(f,self._reduce(straighten)))
 
-  def _reduce(self,ls): 
-    return [(key, sum(i[1] for i in group)) for key, group in itertools.groupby(sorted(ls, key = lambda i: i[0]), lambda i: i[0])]
-  
-  def __len__(self):
-    return len(self.vees)
 
-  def __lt__(self,other):
-    if sum(self.exps) != sum(other.exps):
-      return sum(self.exps) < sum(other.exps)
-    else:
-      return self.exps < other.exps
 
-  def __mul__(self,other):
-    l1, l2 = zip(*self._reduce(zip(self.vees + other.vees, self.exps + other.exps)))
-    return Monomial(self.coef * other.coef, list(l1), list(l2))
-  
-  def __pow__(self, n):
-    f = lambda s,n:map(lambda x:x*n,s)
-    return Monomial(self.coef ** n, self.vees, f(self.exps,n))
 
-  def __eq__(self,other):
-    if self.coef == other.coef and self.coef == 0:
-      return True
-    else:
-      return all([self.coef == other.coef, sorted(zip(self.vees,self.exps)) == sorted(zip(other.vees,other.exps))])
 
-  def __add__(self,other):
-    if self.vees == other.vees and self.exps == other.exps:
-      return Monomial(self.coef + other.coef, self.vees,self.exps)
-    else:
-      return Polynomial([self,other])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Polynomial:
@@ -77,13 +111,3 @@ class Polynomial:
 
   def __eq__(self,other):
     return all([i == j for i in self.P for j in other.P])
-
-
-#============================
-a = Monomial(3,[''], [0])
-b = Monomial(1, ['x'], [1])
-# print (Polynomial([a]) * Polynomial([b])).show_list()
-print (a + b).show_list()
-print Polynomial([a,b]).show_list()
-
-# print [i for i in Polynomial([a])]

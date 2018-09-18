@@ -41,7 +41,7 @@ class Monomial:
       return self.exps < other.exps
 
   def __mul__(self,other):
-    l1, l2 = zip(*self.__reduce(zip(self.vees + other.vees, self.exps + other.exps)))
+    l1, l2 = zip(*self._reduce(zip(self.vees + other.vees, self.exps + other.exps)))
     return Monomial(self.coef * other.coef, list(l1), list(l2))
   
   def __pow__(self, n):
@@ -54,14 +54,36 @@ class Monomial:
     else:
       return all([self.coef == other.coef, sorted(zip(self.vees,self.exps)) == sorted(zip(other.vees,other.exps))])
 
+  def __add__(self,other):
+    if self.vees == other.vees and self.exps == other.exps:
+      return Monomial(self.coef + other.coef, self.vees,self.exps)
+    else:
+      return Polynomial([self,other])
+
 
 class Polynomial:
 # a Polynomial is a list of monomials
   def __init__(self, P):
     self.P = P
 
+  def show_list(self):
+    return map(lambda x:x.show(), self.P)
+
   def show(self):
     return ' + '.join(map(lambda x:x.show(), self.P))
 
   def __mul__(self,other):
-    return [i * j for i in self.P for j in other.P]
+    return Polynomial([i * j for i in self.P for j in other.P])
+
+  def __eq__(self,other):
+    return all([i == j for i in self.P for j in other.P])
+
+
+#============================
+a = Monomial(3,[''], [0])
+b = Monomial(1, ['x'], [1])
+# print (Polynomial([a]) * Polynomial([b])).show_list()
+print (a + b).show_list()
+print Polynomial([a,b]).show_list()
+
+# print [i for i in Polynomial([a])]

@@ -1,5 +1,16 @@
 from multinomiala import *
 
+a = Monomial(3,[''], [0])
+b = Monomial(1, ['x'], [1])
+c = Monomial(1, ['y'], [1])
+d = Monomial(1, ['x'], [3])
+e = Monomial(1, ['y'], [4])
+f = Monomial(2, ['x'], [1])
+g = Monomial(3, ['y'], [1])
+
+u = Monomial(3,['x','y'],[2,3])
+v = Monomial(6, ['x','z'], [3,3])
+
 def test_show():
   assert Monomial(0, [], []).show() == '0'
   assert Monomial(0, ["x"], [1]).show() == '0'
@@ -20,28 +31,19 @@ def test_show():
   assert Polynomial([a,b,c]).show() == '3 + x + y'
   assert Polynomial([g,f,u]).show() == '3y + 2x + 3x^2y^3'
   assert Polynomial([u**2,d,u]).show() == '9x^4y^6 + x^3 + 3x^2y^3'
-  assert (Polynomial([a]) * Polynomial([b])).show() == '3x'
+  # assert (Polynomial([a]) * Polynomial([b])).show() == '3x'
   ############
 
-a = Monomial(3,[''], [0])
-b = Monomial(1, ['x'], [1])
-c = Monomial(1, ['y'], [1])
-d = Monomial(1, ['x'], [3])
-e = Monomial(1, ['y'], [4])
-f = Monomial(2, ['x'], [1])
-g = Monomial(3, ['y'], [1])
-
-u = Monomial(3,['x','y'],[2,3])
-v = Monomial(6, ['x','z'], [3,3])
 
 def test_multiply():
-  assert (a * a).show() == '9'
-  assert (a * b).show() == '3x'
-  assert (b * c).show() == 'xy'
-  assert (c * d).show() == 'x^3y'
-  assert (d * c).show() == 'x^3y'
-  assert (g * b).show() == '3xy'
-  assert (u * v).show() == '18x^5y^3z^3'
+  assert a * a == Monomial(9,[''],[0]) #'9'
+  assert a * b == Monomial(3, ['x'], [1]) #'3x'
+  assert b * c == Monomial(1, ['x','y'],[1,1]) #'xy'
+  assert c * d == Monomial(1, ['x','y'], [3,1]) # 'x^3y'
+  assert d * c == Monomial(1, ['x','y'], [3,1]) # 'x^3y'
+  assert g * b == Monomial(3, ['x','y'], [1,1]) # '3xy'
+  assert u * v == Monomial(18, ['x','y','z'], [5,3,3]) #'18x^5y^3z^3'
+  assert Monomial(2, [''], [0]) * a == '6'
 
 def test_len():
   assert len(v) == 2
@@ -58,3 +60,10 @@ def test_eq():
   assert (u * v).vees == ['x','y','z']
   assert (u * v).exps == [5,3,3]
   assert (u * v)**2 == Monomial(324,['x','y','z'], [10,6,6])
+
+def test_show_list():
+  assert Polynomial([a]).show_list() == ['3']
+  assert Polynomial([b]).show_list() == ['x']
+  assert Polynomial([a]) * Polynomial([b]) == Polynomial([a * b])
+  assert Polynomial([b]) * Polynomial([c]) == Polynomial([b * c])
+  assert Polynomial([e]) * Polynomial([f]) == Polynomial([e * f])

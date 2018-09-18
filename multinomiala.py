@@ -17,12 +17,6 @@ class Monomial:
   def __len__(self):
     return len(self.vees)
 
-  # def __lt__(self,other):
-  #   if sum(self.exps) != sum(other.exps):
-  #     return sum(self.exps) < sum(other.exps)
-  #   else:
-  #     return self.exps < other.exps
-
   def __mul__(self,other):
     reduced = self._reduce(zip(self.vees + other.vees, self.exps + other.exps))
     if reduced == []:

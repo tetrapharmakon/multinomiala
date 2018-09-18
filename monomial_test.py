@@ -52,13 +52,6 @@ def test_eq():
   assert (u ** 3) == Monomial(27, {'x': 6, 'y': 9})
   assert (u * v) == Monomial(18, {'x': 5, 'y': 3, 'z': 3})
 
-# def test_show_list():
-#   assert Polynomial([a]).show_list() == ['3']
-#   assert Polynomial([b]).show_list() == ['x']
-#   assert Polynomial([a]) * Polynomial([b]) == Polynomial([a * b])
-#   assert Polynomial([b]) * Polynomial([c]) == Polynomial([b * c])
-#   assert Polynomial([e]) * Polynomial([f]) == Polynomial([e * f])
-
 def test_show():
   assert Monomial(0, {}).show() == '0'
   assert Monomial(0, {"x": 1}).show() == '0'
@@ -75,8 +68,4 @@ def test_show():
   assert Monomial(1, {"x": 0}).show() == '1'
   assert Monomial(2, {"y": 0}).show() == '2'
   assert Monomial(3, {'x':2, 'y':5, 'z':3}).show() == '3x^2y^5z^3'
-  # assert Polynomial([a,b,c]).show() == '3 + x + y'
-  # assert Polynomial([g,f,u]).show() == '3y + 2x + 3x^2y^3'
-  # assert Polynomial([u**2,d,u]).show() == '9x^4y^6 + x^3 + 3x^2y^3'
-  # assert (Polynomial([a]) * Polynomial([b])).show() == '3x'
-#   ############
+  
